@@ -2,6 +2,8 @@
 
 A simple, multi-platform tool for viewing the contents of monolingual lexicons.
 
+*Note that this is a beta release. The tool is under development.*
+
 On Windows, you can run the EXE file directly, but you have to provide it with an input lexicon as argument. For example, the example Quechua lexicon included in the distribution can be loaded as follows:
 
 ```console
