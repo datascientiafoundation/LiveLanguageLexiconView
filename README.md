@@ -1,4 +1,5 @@
-# LiveLanguageLexiconView
+# LiveLanguage Lexicon Viewer
+
 A simple, multi-platform tool for viewing the contents of monolingual lexicons.
 
 On Windows, you can run the EXE file directly, but you have to provide it with an input lexicon as argument. For example, the example Quechua lexicon included in the distribution can be loaded as follows:
