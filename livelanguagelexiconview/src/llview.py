@@ -1,3 +1,4 @@
+import os
 import sys
 import xml.sax
 import PySimpleGUI as sg
@@ -147,6 +148,9 @@ def LText(text, k, *positionalArgs, **keywordArgs):
     linkList.append(k)
     return [sg.Text("►", key=k, enable_events = True, pad=0, border_width=0, font="Helvetica 12 bold", text_color="blue"), SText(text, *positionalArgs, **keywordArgs)]
 
+def resource_path(relative_path):
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
 
 # ==================================================================================
 
@@ -164,10 +168,15 @@ langPublisher = "undefined"
 langDescription = "undefined"
 langProv = []
 
-if len(sys.argv) < 2:
+# 
+if len(sys.argv) < 1:
     print("An LMF/XML file is needed as input argument! Exiting.")
     sys.exit(1)
-fn = sys.argv[1]
+# 
+    
+# fn = sys.argv[1]
+
+fn = open(resource_path("mon.xml"))
 parser = xml.sax.make_parser()
 handler = SaxHandler()
 parser.setContentHandler(handler)
