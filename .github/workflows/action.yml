@@ -3,37 +3,135 @@
 
 name: Live Language Lexicon View
 
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "workflow" ]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  build:
+  # buildOnWindows:
+  #   runs-on: [windows-latest]
 
-    runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v1
+  #   - name: Set up Python 3.11
+  #     uses: actions/setup-python@v3
+  #     with:
+  #       python-version: "3.11"
+  #   - name: Install dependencies
+  #     run: |
+  #       pip install pyinstaller
+  #       pyinstaller llview.spec
+
+  buildOnWindows:
+    runs-on: [windows-latest]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.11
       uses: actions/setup-python@v3
       with:
-        python-version: "3.10"
+        python-version: "3.11"
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install flake8 pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Lint with flake8
+        pip install pyinstaller
+        pyinstaller llview.spec
+    - uses: actions/upload-artifact@v2
+      with:
+        name: LiveLanguage
+        path: dist/llview.exe
+    
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v1.0
+        release_name: v1.0
+        overwrite: true
+        body: |
+          Test Release v1.0
+        draft: false
+        prerelease: false
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{steps.create_release.outputs.upload_url}}
+        asset_path: dist/llview.exe
+        asset_name: LiveLanguageLexicon.exe
+        asset_content_type: application/zip
+
+
+  buildOnMacos:
+    runs-on: [macos-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.11"
+    - name: Install dependencies
       run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
-      run: |
-        pytest
+        pip install pyinstaller
+        pyinstaller llview.spec
+    - uses: actions/upload-artifact@v2
+      with:
+        name: LiveLanguage
+        path: dist/llview
+    
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v1
+        release_name: v1
+        overwrite: true
+        body: |
+          Test Release v1.0
+        draft: false
+        prerelease: false
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{steps.create_release.outputs.upload_url}}
+        asset_path: dist/llview
+        asset_name: LiveLanguageLexicon.app
+        asset_content_type: application/zip
+
+  # buildOnUbuntu:
+  #   runs-on: [macos-latest]
+
+  #   steps:
+  #   - uses: actions/checkout@v1
+  #   - name: Set up Python 3.11
+  #     uses: actions/setup-python@v3
+  #     with:
+  #       python-version: "3.11"
+  #   - name: Install dependencies
+  #     run: |
+  #       pip install pyinstaller
+  #       pyinstaller llview.spec
+
+    # - name: Test with pytest
+    #   run: |
+    #     pytest
+        # python -m pip install --upgrade pip
+            
+        
