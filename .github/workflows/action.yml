@@ -1,0 +1,61 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# Also workflow will create window graphical application for operating systems
+
+# name: Live Language Lexicon View
+
+# # on:
+# #   push:
+# #     branches: [ "main" ]
+# #   pull_request:
+# #     branches: [ "main" ]
+# on:
+#   push:
+#     branches: [ "workflow" ]
+
+# permissions:
+#   contents: write
+
+# jobs:
+
+#   buildOnMacos:
+#     runs-on: [macos-latest]
+
+#     steps:
+#     - uses: actions/checkout@v1
+#     - name: Set up Python 3.11
+#       uses: actions/setup-python@v3
+#       with:
+#         python-version: "3.11"
+#     - name: Install dependencies
+#       run: |
+#         pip install pyinstaller
+#         pyinstaller llview.spec
+#     - uses: actions/upload-artifact@v2
+#       with:
+#         name: LiveLanguage
+#         path: dist/llview
+    
+#     - name: Create release
+#       id: create_release
+#       uses: actions/create-release@v1
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       with:
+#         tag_name: v1
+#         release_name: v1
+#         overwrite: true
+#         body: |
+#           Test Release v1.0
+#         draft: false
+#         prerelease: false
+#     - name: Upload Release Asset
+#       id: upload-release-asset
+#       uses: actions/upload-release-asset@v1
+#       env: 
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       with:
+#         upload_url: ${{steps.create_release.outputs.upload_url}}
+#         asset_path: dist/llview
+#         asset_name: LiveLanguageLexicon.app
+#         asset_content_type: application/zip
+        
